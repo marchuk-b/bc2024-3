@@ -1,4 +1,5 @@
 const { program } = require('commander');
+const { error } = require('node:console');
 const fs = require('node:fs');
 
 program
@@ -15,4 +16,9 @@ if(options.input === undefined) console.error('Please, specify input file');
 
 if(!fs.existsSync(filepath)) 
     console.error('Cannot find input file');
+
+if(options.output === undefined && options.display === undefined) return;
+
+
+
 
