@@ -19,6 +19,9 @@ if(!fs.existsSync(filepath))
 
 if(options.output === undefined && options.display === undefined) return;
 
+const filecontent = fs.readFileSync(filepath, {encoding: "utf8"});
 
-
-
+if(options.output !== undefined && options.display !== undefined) {
+    fs.writeFileSync(options.output, filecontent);
+    console.log(filecontent);
+}
