@@ -1,5 +1,4 @@
 const { program } = require('commander');
-const { error } = require('node:console');
 const fs = require('node:fs');
 
 program
@@ -17,11 +16,25 @@ if(options.input === undefined) console.error('Please, specify input file');
 if(!fs.existsSync(filepath)) 
     console.error('Cannot find input file');
 
-if(options.output === undefined && options.display === undefined) return;
+const filecontent = fs.readFileSync(filepath, {
+    'encoding': 'utf-8',
+    'flag': 'r'
+});
 
-const filecontent = fs.readFileSync(filepath, {encoding: "utf8"});
+const jsonData = JSON.parse(filecontent);
 
-if(options.output !== undefined && options.display !== undefined) {
-    fs.writeFileSync(options.output, filecontent);
-    console.log(filecontent);
+const requiredfields = ["Доходи, усього", "Витрати, усього"];
+
+const outputData = [];
+
+jsonData.forEach(element => {
+    if(requiredfields.includes(element.txt)) {
+        outputData.push(element.txt + " : " + element.value)
+    }
+});
+
+if(options.output) {
+    fs.writeFileSync(options.output, outputData.join("\n"));
 }
+
+if(options.display) console.log(outputData.join("\n"))
